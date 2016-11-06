@@ -1,0 +1,68 @@
+[user]
+  email = eric@pagefault.se
+  name = Eric Skoglund
+[color]
+  branch = auto
+  diff = auto
+  status = auto
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = cyan
+[color "diff"]
+  meta = cyan bold
+  frag = magenta bold
+  old = red bold
+  new = yellow bold
+[color "status"]
+  added = green
+  changed = red
+  untracked = cyan
+[alias]
+  st = status
+  ci = commit
+  br = branch
+  co = checkout
+  df = diff
+  ls = log --stat
+  l = log --graph --decorate --pretty=oneline --abbrev-commit --all
+  lst = log --all --format='%C(yellow)%h %C(magenta)%ar %Cgreen%d %Cred%cn %Creset%s' --since='24 hours ago'
+  rso = remote show origin
+  ign = ls-files -o -i --exclude-standard
+
+  # If you accidentaly commited to the wrong branch this will take the
+  # last commit from the current branch and make you a new one with
+  # it.
+  # TODO: What if you commited twice or trice? Make head take a argument
+  doh = "!f() { git branch $1; git reset HEAD~ --hard; git co $1; }; f"
+
+  # Well did it again commited to the wrong branch!
+  # This will take the latest commit and reset it while
+  # keeping the changes. Then checkout the branch you _meant_
+  # to commit to and let you try again.
+  # TODO: Rewrite to use cherry-pick
+  crap = "!f() { git reset HEAD~ --soft; git stash; git co $1; git stash pop; }; f"
+
+  # Print the files that a git grep query matches and how many matches
+  # we have
+  gls = "!f() { git grep $1 | awk -F':' '{ print $1 }' | sort | uniq -c | sort -nr; }; f"
+[core]
+  whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+  excludesfile = /Users/eric.skoglund/.gitignore
+  autocrlf = input
+  editor = /usr/bin/emacs
+[mergetool "diffmerge"]
+  cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
+  trustExitCode = true
+[merge]
+  tool = diffmerge
+[push]
+  default = tracking
+
+[filter "media"]
+        clean = git-media-clean %f
+        smudge = git-media-smudge %f
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
