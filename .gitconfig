@@ -27,7 +27,7 @@
   ls = log --stat
   l = log --graph --decorate --pretty=oneline --abbrev-commit --all
   lst = log --all --format='%C(yellow)%h %C(magenta)%ar %Cgreen%d %Cred%cn %Creset%s' --since='32 hours ago'
-  merges = lst --merges
+  merges = !git lst --merges
   rso = remote show origin
   ign = ls-files -o -i --exclude-standard
 
