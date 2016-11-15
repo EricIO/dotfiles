@@ -1,5 +1,5 @@
 [user]
-  email = eric@pagefault.se
+  email = eric.skoglund@expressen.se
   name = Eric Skoglund
 [color]
   branch = auto
@@ -26,9 +26,17 @@
   df = diff
   ls = log --stat
   l = log --graph --decorate --pretty=oneline --abbrev-commit --all
-  lst = log --all --format='%C(yellow)%h %C(magenta)%ar %Cgreen%d %Cred%cn %Creset%s' --since='24 hours ago'
+  lst = log --all --format='%C(yellow)%h %C(magenta)%ar %Cgreen%d %Cred%cn %Creset%s' --since='32 hours ago'
+  merges = lst --merges
   rso = remote show origin
   ign = ls-files -o -i --exclude-standard
+
+  # You've been working in you local branch for a while and want to
+  # push it to origin, do a git push and then get greeted with "then
+  # current branch bla bla bla use command bla bla". Plz I don't want that!
+  # Using this alias it will push the current branch to origin and create
+  # it at the remote automagically!!
+  publish = "!git push -u origin $(git rev-parse --abbrev-ref HEAD)"
 
   # If you accidentaly commited to the wrong branch this will take the
   # last commit from the current branch and make you a new one with
