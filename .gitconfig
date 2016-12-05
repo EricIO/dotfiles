@@ -1,5 +1,5 @@
 [user]
-  email = eric@pagefault.se
+  email = eric.skoglund@expressen.se
   name = Eric Skoglund
 [color]
   branch = auto
@@ -26,9 +26,17 @@
   df = diff
   ls = log --stat
   l = log --graph --decorate --pretty=oneline --abbrev-commit --all
-  lst = log --all --format='%C(yellow)%h %C(magenta)%ar %Cgreen%d %Cred%cn %Creset%s' --since='24 hours ago'
+  lst = log --all --format='%C(yellow)%h %C(magenta)%ar %Cgreen%d %Cred%cn %Creset%s' --since='32 hours ago'
+  merges = !git lst --merges
   rso = remote show origin
   ign = ls-files -o -i --exclude-standard
+
+  # You've been working in you local branch for a while and want to
+  # push it to origin, do a git push and then get greeted with "then
+  # current branch bla bla bla use command bla bla". Plz I don't want that!
+  # Using this alias it will push the current branch to origin and create
+  # it at the remote automagically!!
+  publish = "!git push -u origin $(git rev-parse --abbrev-ref HEAD)"
 
   # If you accidentaly commited to the wrong branch this will take the
   # last commit from the current branch and make you a new one with
@@ -46,6 +54,13 @@
   # Print the files that a git grep query matches and how many matches
   # we have
   gls = "!f() { git grep $1 | awk -F':' '{ print $1 }' | sort | uniq -c | sort -nr; }; f"
+
+  # Delete all lines matching a supplied regexp
+  del = "!f() { git diff --name-only -G $1 | xargs sed -i '.orgi' /$1/d; }; f"
+
+  # Delete all console.log statements from all the files that you have modified.
+  dcl = "!git del 'console.log'"
+
 [core]
   whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
   excludesfile = /Users/eric.skoglund/.gitignore
@@ -60,8 +75,8 @@
   default = tracking
 
 [filter "media"]
-        clean = git-media-clean %f
-        smudge = git-media-smudge %f
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
 [filter "lfs"]
 	clean = git-lfs clean %f
 	smudge = git-lfs smudge %f
