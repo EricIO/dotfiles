@@ -2,34 +2,34 @@
   email = eric.skoglund@expressen.se
   name = Eric Skoglund
 [color]
-  branch = auto
-  diff = auto
-  status = auto
+  branch  = auto
+  diff    = auto
+  status  = auto
 [color "branch"]
   current = yellow reverse
-  local = yellow
-  remote = cyan
+  local   = yellow
+  remote  = cyan
 [color "diff"]
   meta = cyan bold
   frag = magenta bold
-  old = red bold
-  new = yellow bold
+  old  = red bold
+  new  = yellow bold
 [color "status"]
-  added = green
-  changed = red
+  added     = green
+  changed   = red
   untracked = cyan
 [alias]
-  st = status
-  ci = commit
-  br = branch
-  co = checkout
-  df = diff
-  ls = log --stat
-  l = log --graph --decorate --pretty=oneline --abbrev-commit --all
-  lst = log --all --format='%C(yellow)%h %C(magenta)%ar %Cgreen%d %Cred%cn %Creset%s' --since='32 hours ago'
+  st     = status
+  ci     = commit
+  br     = branch
+  co     = checkout
+  df     = diff
+  ls     = log --stat
+  l      = log --graph --decorate --pretty=oneline --abbrev-commit --all
+  lst    = log --all --format='%C(yellow)%h %C(magenta)%ar %Cgreen%d %Cred%cn %Creset%s' --since='32 hours ago'
   merges = !git lst --merges
-  rso = remote show origin
-  ign = ls-files -o -i --exclude-standard
+  rso    = remote show origin
+  ign    = ls-files -o -i --exclude-standard
 
   # You've been working in you local branch for a while and want to
   # push it to origin, do a git push and then get greeted with "then
@@ -56,10 +56,19 @@
   gls = "!f() { git grep $1 | awk -F':' '{ print $1 }' | sort | uniq -c | sort -nr; }; f"
 
   # Delete all lines matching a supplied regexp
-  del = "!f() { git diff --name-only -G $1 | xargs sed -i '.orgi' /$1/d; }; f"
+  del = "!f() { git diff --name-only -G $1 | xargs sed -i '' /$1/d; }; f"
 
   # Delete all console.log statements from all the files that you have modified.
   dcl = "!git del 'console.log'"
+
+  # Happily hacking on something and you find yourself needing to stop what you
+  # are doing to fix something or maybe you just need to create a new feature
+  # on a project that you haven't worked on for a while. This little bitty command
+  # will stash all your changes, go to master and pull it down, create a new branch
+  # for you! This is mostly an internal command use git feature or git fix instead!
+  clean-fork = "!f() { git stash; git checkout master; git pull origin master; git checkout -b $1/$2; }; f"
+  feature = "!f() { git clean-fork feature $1; }; f"
+  fix = "!f() { git clean-fork fix $1; }; f"
 
 [core]
   whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
@@ -71,13 +80,14 @@
   trustExitCode = true
 [merge]
   tool = diffmerge
+  conflictstyle = diff3
 [push]
   default = tracking
 
 [filter "media"]
-	clean = git-media-clean %f
-	smudge = git-media-smudge %f
+        clean = git-media-clean %f
+        smudge = git-media-smudge %f
 [filter "lfs"]
-	clean = git-lfs clean %f
-	smudge = git-lfs smudge %f
-	required = true
+        clean = git-lfs clean %f
+        smudge = git-lfs smudge %f
+        required = true
